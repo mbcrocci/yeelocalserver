@@ -17,7 +17,7 @@ type Server interface {
 }
 
 type LightsServer struct {
-	app           *fiber.Application
+	app           *fiber.App
 	port          int
 	lightsHandler handlers.Handler
 	discover      *services.DiscoverService

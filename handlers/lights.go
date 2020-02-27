@@ -15,7 +15,7 @@ func NewLightsHandler(repo *services.LightStore) *LightsHandler {
 	}
 }
 
-func (lh *LightsHandler) Setup(root string, app *fiber.Application) {
+func (lh *LightsHandler) Setup(root string, app *fiber.App) {
 	app.Get(root+"/", func(c *fiber.Ctx) {
 		lights := lh.repo.Lights()
 
