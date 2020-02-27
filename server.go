@@ -22,18 +22,18 @@ type LightsServer struct {
 	lightsHandler handlers.Handler
 	discover      *services.DiscoverService
 	lightChannel  chan string
-	repo          services.LightStore
+	repo          *services.LightStore
 }
 
 func (s *LightsServer) Init() {
-	s.repo = services.LightStore{}
+	s.repo = &services.LightStore{}
 	s.repo.Init()
 
 	s.discover = services.NewDiscoverService()
 	s.discover.Init()
 
 	s.app = fiber.New()
-	s.lightsHandler = handlers.NewLightsHandler(&s.repo)
+	s.lightsHandler = handlers.NewLightsHandler(s.repo)
 
 	s.lightsHandler.Setup("/lights", s.app)
 }

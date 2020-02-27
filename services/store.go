@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/mbcrocci/yeelocalsrv/entities"
@@ -8,24 +9,32 @@ import (
 
 type LightStore struct {
 	lights []*entities.Light
-	mux    *sync.Mutex
+	mux    sync.Mutex
+}
+
+func (ls *LightStore) Len() int {
+	return len(ls.lights)
 }
 
 func (ls *LightStore) Init() {
 	ls.lights = make([]*entities.Light, 0)
-	ls.mux = &sync.Mutex{}
+	ls.mux = sync.Mutex{}
+
+	fmt.Println("Lights Store initialized...")
 }
 
 func (ls *LightStore) Add(l *entities.Light) {
 	light := ls.Find(l.ID)
 	if light == nil {
 		ls.mux.Lock()
-		ls.lights = append(ls.lights, light)
+		ls.lights = append(ls.lights, l)
 		ls.mux.Unlock()
 	}
 }
 
 func (ls *LightStore) Find(id string) *entities.Light {
+	fmt.Println("GOT ID: " + id)
+
 	for _, light := range ls.lights {
 		if light.ID == id {
 			return light

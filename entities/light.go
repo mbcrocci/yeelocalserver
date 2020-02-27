@@ -33,6 +33,10 @@ func (l Light) String() string {
 	return fmt.Sprintf("%s: {\n\tpower: %s,\n}", l.Name, l.Power)
 }
 
+func (l Light) Equal(l2 *Light) bool {
+	return l.ID == l2.ID
+}
+
 func (l *Light) Supports() []string {
 	return strings.Split(l.Support, " ")
 }
