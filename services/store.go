@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/mbcrocci/yeelocalsrv/entities"
@@ -19,8 +18,6 @@ func (ls *LightStore) Len() int {
 func (ls *LightStore) Init() {
 	ls.lights = make([]*entities.Light, 0)
 	ls.mux = sync.Mutex{}
-
-	fmt.Println("Lights Store initialized...")
 }
 
 func (ls *LightStore) Add(l *entities.Light) {
@@ -33,8 +30,6 @@ func (ls *LightStore) Add(l *entities.Light) {
 }
 
 func (ls *LightStore) Find(id string) *entities.Light {
-	fmt.Println("GOT ID: " + id)
-
 	for _, light := range ls.lights {
 		if light.ID == id {
 			return light

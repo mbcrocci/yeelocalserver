@@ -33,7 +33,7 @@ func (s *LightsServer) Init() {
 	s.discover.Init()
 
 	s.app = fiber.New()
-	s.lightsHandler = handlers.NewLightsHandler(s.repo)
+	s.lightsHandler = handlers.NewLightsHandler(s.repo, s.discover)
 
 	s.lightsHandler.Setup("/lights", s.app)
 }

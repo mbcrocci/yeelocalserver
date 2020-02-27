@@ -98,7 +98,7 @@ func (ds DiscoverService) ParseLight(ls string) (*entities.Light, error) {
 
 			keyvalues := strings.Split(l, ":")
 			if len(keyvalues) > 1 {
-				value := strings.Join(keyvalues[1:], "") // in "Location" the value is "yeelight://<ip>", which makes it have more than 1 value
+				value := strings.Join(keyvalues[1:], ":") // in "Location" the value is "yeelight://<ip>", which makes it have more than 1 value
 
 				k, v := strings.TrimSpace(keyvalues[0]), strings.TrimSpace(value)
 
@@ -117,4 +117,23 @@ func (ds DiscoverService) ParseLight(ls string) (*entities.Light, error) {
 	}
 
 	return light, nil
+}
+
+func (ds *DiscoverService) SendCommand(light *entities.Light, cmd *entities.Command) error {
+	saddr := strings.Replace(light.Location, "yeelight://", "", 1)
+
+	jsonCmd, err := json.Marshal(cmd)
+	if err != nil {
+		return err
+	}
+
+	conn, err := net.Dial("tcp", saddr)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	fmt.Fprintf(conn, "%s\r\n", jsonCmd)
+
+	return nil
 }

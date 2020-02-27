@@ -10,8 +10,9 @@ type Light struct {
 	ID              string `json:"id"`
 	Name            string `json:"name"`
 	Model           string `json:"model"`
-	Power           string `json:"power"`
 	FirmwareVersion int    `json:"fw_ver,string"`
+	Location        string `json:"location"`
+	Power           string `json:"power"`
 	Brightness      int    `json:"bright,string"`
 	ColorMode       string `json:"color_mode"`
 	Ct              string `json:"ct"`
