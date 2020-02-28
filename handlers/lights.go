@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gofiber/fiber"
 	"github.com/mbcrocci/yeelocalsrv/entities"
@@ -35,11 +36,34 @@ func (lh *LightsHandler) Setup(root string, app *fiber.App) {
 			err := lh.discover.SendCommand(light, cmd)
 			if err != nil {
 				fmt.Println(err)
-				c.SendStatus(500)
+				c.SendStatus(http.StatusInternalServerError)
 				return
 			}
 		}
 
-		c.SendStatus(200)
+		c.SendStatus(http.StatusOK)
+	})
+
+	app.Post(root+"/:id", func(c *fiber.Ctx) {
+		id := c.Params("id")
+		light, err := lh.repo.Find(id)
+		if err != nil {
+			c.SendStatus(http.StatusNotFound)
+			return
+		}
+
+		var cmd entities.Command
+		if err := c.BodyParser(&cmd); err != nil {
+			c.SendStatus(http.StatusBadRequest)
+			return
+		}
+
+		err = lh.discover.SendCommand(light, &cmd)
+		if err != nil {
+			c.SendStatus(http.StatusInternalServerError)
+			return
+		}
+
+		c.SendStatus(http.StatusOK)
 	})
 }
