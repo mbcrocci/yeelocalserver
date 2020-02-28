@@ -32,8 +32,12 @@ func TestFindsLight(t *testing.T) {
 	s.Init()
 	PopulateStore(s)
 
-	light := s.Find("testid1")
-	if light == nil {
+	light, err := s.Find("testid1")
+	if err != nil {
 		t.Error("Cound't find light by id")
+	}
+
+	if light.ID != "testid1" {
+		t.Error("Returned light is incorrect")
 	}
 }

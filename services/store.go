@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"sync"
 
 	"github.com/mbcrocci/yeelocalsrv/entities"
@@ -21,7 +22,7 @@ func (ls *LightStore) Init() {
 }
 
 func (ls *LightStore) Add(l *entities.Light) {
-	light := ls.Find(l.ID)
+	light, _ := ls.Find(l.ID)
 	if light == nil {
 		ls.mux.Lock()
 		ls.lights = append(ls.lights, l)
@@ -29,13 +30,13 @@ func (ls *LightStore) Add(l *entities.Light) {
 	}
 }
 
-func (ls *LightStore) Find(id string) *entities.Light {
+func (ls *LightStore) Find(id string) (*entities.Light, error) {
 	for _, light := range ls.lights {
 		if light.ID == id {
-			return light
+			return light, nil
 		}
 	}
-	return nil
+	return nil, errors.New("Couldn't find light")
 }
 
 func (ls *LightStore) Lights() []*entities.Light {
