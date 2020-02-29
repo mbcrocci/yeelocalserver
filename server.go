@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber"
 	"github.com/mbcrocci/yeelocalsrv/entities"
@@ -23,9 +23,12 @@ type LightsServer struct {
 	discover      *services.DiscoverService
 	lightChannel  chan string
 	repo          *services.LightStore
+	logger        *log.Logger
 }
 
 func (s *LightsServer) Init() {
+	s.logger = log.New(os.Stdout, "lights ", log.LstdFlags)
+
 	s.repo = &services.LightStore{}
 	s.repo.Init()
 
@@ -33,9 +36,10 @@ func (s *LightsServer) Init() {
 	s.discover.Init()
 
 	s.app = fiber.New()
-	s.lightsHandler = handlers.NewLightsHandler(s.repo, s.discover)
+	s.lightsHandler = handlers.NewLightsHandler(s.repo, s.discover, s.logger)
 
 	s.lightsHandler.Setup("/lights", s.app)
+
 }
 
 func (s *LightsServer) Start() {
@@ -67,11 +71,10 @@ func (s *LightsServer) ListenLights() {
 		for {
 			select {
 			case light := <-lc:
-				fmt.Println("Got light!")
 				s.repo.Add(light)
 
 			case err := <-ec:
-				log.Println(err)
+				s.logger.Println(err)
 			}
 		}
 	}()
