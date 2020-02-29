@@ -27,7 +27,20 @@ func (ls *LightStore) Add(l *entities.Light) {
 		ls.mux.Lock()
 		ls.lights = append(ls.lights, l)
 		ls.mux.Unlock()
+		return
 	}
+
+	i := 0
+	for index, l2 := range ls.lights {
+		if l2.ID == light.ID {
+			i = index
+			break
+		}
+	}
+
+	ls.mux.Lock()
+	ls.lights[i] = l
+	ls.mux.Unlock()
 }
 
 func (ls *LightStore) Find(id string) (*entities.Light, error) {

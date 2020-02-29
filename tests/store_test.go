@@ -12,6 +12,21 @@ func PopulateStore(s *services.LightStore) {
 	s.Add(&entities.Light{ID: "testid2", Name: "l2"})
 }
 
+func TestFindsLight(t *testing.T) {
+	s := &services.LightStore{}
+	s.Init()
+	PopulateStore(s)
+
+	light, err := s.Find("testid1")
+	if err != nil {
+		t.Error("Cound't find light by id")
+	}
+
+	if light.ID != "testid1" {
+		t.Error("Returned light is incorrect")
+	}
+}
+
 func TestAddsLight(t *testing.T) {
 	s := &services.LightStore{}
 	s.Init()
@@ -27,17 +42,24 @@ func TestAddsLight(t *testing.T) {
 	}
 }
 
-func TestFindsLight(t *testing.T) {
+func TestAddModifiesExistingLigt(t *testing.T) {
 	s := &services.LightStore{}
 	s.Init()
 	PopulateStore(s)
 
-	light, err := s.Find("testid1")
-	if err != nil {
-		t.Error("Cound't find light by id")
+	toModify := "testid1"
+	newName := "l3"
+	s.Add(&entities.Light{ID: toModify, Name: newName})
+
+	if s.Len() > 2 {
+		t.Error("Shouldn't add the light")
 	}
 
-	if light.ID != "testid1" {
-		t.Error("Returned light is incorrect")
+	l, err := s.Find(toModify)
+	if err != nil {
+		t.Error(err)
+
+	} else if l.Name != newName {
+		t.Error("Should have modified light")
 	}
 }
