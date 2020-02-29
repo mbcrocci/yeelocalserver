@@ -1,8 +1,9 @@
 package tests
 
 import (
-	 "github.com/mbcrocci/yeelocalsrv/entities"
 	"testing"
+
+	"github.com/mbcrocci/yeelocalsrv/entities"
 )
 
 func TestLightEquality(t *testing.T) {
@@ -11,5 +12,17 @@ func TestLightEquality(t *testing.T) {
 
 	if !l1.Equal(l2) {
 		t.Error("Lights should be equal")
+	}
+}
+
+func TestLightSupportsMethod(t *testing.T) {
+	l := &entities.Light{Support: "set_power toggle"}
+
+	if l.Supports("set_rgb") {
+		t.Error("Light shouldn't support command")
+	}
+
+	if !l.Supports("toggle") {
+		t.Error("Light should support command")
 	}
 }
