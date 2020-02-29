@@ -1,4 +1,4 @@
-# yeelocalserver
+# Yeelocalserver
 An http server that runs a service to discover yeelights in your local network
 
 ### Install and Run
@@ -9,12 +9,12 @@ yeelocalserver
 ```
 
 ### Consume api
-#### Lights
+#### Get all Lights
 ```http
 GET http://localhost:3000/lights HTTP/1.1
 ```
 
-#### Command
+#### Send a Command
 ```http
 POST :3000/lights/<light id>/command HTTP/1.1
 "Content-type": "application/json"
