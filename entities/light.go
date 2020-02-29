@@ -38,8 +38,14 @@ func (l Light) Equal(l2 *Light) bool {
 	return l.ID == l2.ID
 }
 
-func (l *Light) Supports() []string {
-	return strings.Split(l.Support, " ")
+func (l *Light) Supports(cmd string) bool {
+	for _, c := range strings.Split(l.Support, " ") {
+		if c == cmd {
+			return true
+		}
+	}
+
+	return false
 }
 
 // func (l *Light) RGB() (uint32, uint32, uint32, uint32) {
