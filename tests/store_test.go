@@ -3,18 +3,16 @@ package tests
 import (
 	"testing"
 
-	"github.com/mbcrocci/yeelocalsrv/entities"
-	"github.com/mbcrocci/yeelocalsrv/services"
+	"github.com/mbcrocci/yeelocalsrv/internal/data"
 )
 
-func PopulateStore(s *services.LightStore) {
-	s.Add(&entities.Light{ID: "testid1", Name: "l1"})
-	s.Add(&entities.Light{ID: "testid2", Name: "l2"})
+func PopulateStore(s *data.LightModel) {
+	s.Add(&data.Light{ID: "testid1", Name: "l1"})
+	s.Add(&data.Light{ID: "testid2", Name: "l2"})
 }
 
 func TestFindsLight(t *testing.T) {
-	s := &services.LightStore{}
-	s.Init()
+	s := data.NewLightModel()
 	PopulateStore(s)
 
 	light, err := s.Find("testid1")
@@ -28,8 +26,7 @@ func TestFindsLight(t *testing.T) {
 }
 
 func TestAddsLight(t *testing.T) {
-	s := &services.LightStore{}
-	s.Init()
+	s := data.NewLightModel()
 
 	if s.Len() != 0 {
 		t.Error("Store should be empty")
@@ -43,13 +40,12 @@ func TestAddsLight(t *testing.T) {
 }
 
 func TestAddModifiesExistingLigt(t *testing.T) {
-	s := &services.LightStore{}
-	s.Init()
+	s := &data.LightModel{}
 	PopulateStore(s)
 
 	toModify := "testid1"
 	newName := "l3"
-	s.Add(&entities.Light{ID: toModify, Name: newName})
+	s.Add(&data.Light{ID: toModify, Name: newName})
 
 	if s.Len() > 2 {
 		t.Error("Shouldn't add the light")

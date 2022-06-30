@@ -3,12 +3,12 @@ package tests
 import (
 	"testing"
 
-	"github.com/mbcrocci/yeelocalsrv/entities"
+	"github.com/mbcrocci/yeelocalsrv/internal/data"
 )
 
 func TestLightEquality(t *testing.T) {
-	l1 := &entities.Light{ID: "testid"}
-	l2 := &entities.Light{ID: "testid"}
+	l1 := &data.Light{ID: "testid"}
+	l2 := &data.Light{ID: "testid"}
 
 	if !l1.Equal(l2) {
 		t.Error("Lights should be equal")
@@ -16,7 +16,7 @@ func TestLightEquality(t *testing.T) {
 }
 
 func TestLightSupportsMethod(t *testing.T) {
-	l := &entities.Light{Support: "set_power toggle"}
+	l := &data.Light{Support: "set_power toggle"}
 
 	if l.Supports("set_rgb") {
 		t.Error("Light shouldn't support command")

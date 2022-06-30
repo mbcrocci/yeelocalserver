@@ -3,41 +3,17 @@ package tests
 import (
 	"testing"
 
-	"github.com/mbcrocci/yeelocalsrv/entities"
-	"github.com/mbcrocci/yeelocalsrv/services"
+	"github.com/mbcrocci/yeelocalsrv/internal/data"
+	"github.com/mbcrocci/yeelocalsrv/internal/yeelight"
 )
 
 type ParseResult struct {
-	light *entities.Light
+	light *data.Light
 	err   error
 }
 
-func TestInit(t *testing.T) {
-	ds := services.NewDiscoverService()
-
-	err := ds.Init()
-	if err != nil {
-		t.Error("Couldn't Initilize ")
-	}
-
-	ds.Shutdown()
-}
-
-func TestShutdown(t *testing.T) {
-	ds := services.NewDiscoverService()
-	err := ds.Init()
-	if err != nil {
-		return
-	}
-
-	err = ds.Shutdown()
-	if err != nil {
-		t.Error("Couln't shutdown Discover Service")
-	}
-}
-
 func TestEmptyParse(t *testing.T) {
-	_, err := services.NewDiscoverService().ParseLight("")
+	_, err := yeelight.NewDiscoverService().ParseLight("")
 	if err == nil {
 		t.Error("Parse of an empty string should return an error")
 	}

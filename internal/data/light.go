@@ -65,6 +65,10 @@ func NewLightModel() *LightModel {
 	}
 }
 
+func (l *LightModel) Len() int {
+	return len(l.lights)
+}
+
 func (l *LightModel) List() []*Light {
 	return l.lights
 }
